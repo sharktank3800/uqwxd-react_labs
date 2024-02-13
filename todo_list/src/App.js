@@ -1,8 +1,23 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./App.css";
 const App = () => {
   const [todos, setTodos] = useState([]);
   const [todoEditing, setTodoEditing] = useState(null);
+
+  useEffect(() => {
+    const json = localStorage.getItem("todos");
+    const loadedTodos = JSON.parse(json);
+    if(loadedTodos) {
+      setTodos(loadedTodos);
+    }
+  }, [])
+
+  useEffect(() => {
+    if(todos.length > 0){
+      const json = JSON.stringify(todos);
+      localStorage.setItem("todos", json);
+    }
+  }, [todos]);
 
   // Add the handlesubmit code here
   function handlesubmit(e) {
@@ -87,7 +102,7 @@ const App = () => {
             (
               <button onClick={() => setTodoEditing(todo.id)}>Edit</button>
             )}
-            
+
            <button onClick={() => deleteToDo(todo.id)}>Delete</button>
           </div>
         </div>
